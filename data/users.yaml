@@ -1,5 +1,14 @@
 # 用户测试数据配置文件
 
+# 测试环境用户数据 (http://62.234.96.153:55409)
+test_env:
+  username: "testuser"
+  password: "password123"
+  email: "testuser@test.com"
+  first_name: "测试"
+  last_name: "用户"
+  role: "user"
+
 default:
   username: "testuser"
   password: "password123"

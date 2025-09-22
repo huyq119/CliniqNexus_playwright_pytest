@@ -30,8 +30,8 @@ module.exports = defineConfig({
   
   // 全局设置
   use: {
-    // 基础URL
-    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+    // 基础URL - 支持多环境配置
+    baseURL: process.env.BASE_URL || (process.env.TEST_ENV === 'test' ? 'http://62.234.96.153:55409' : 'http://localhost:3000'),
     
     // 浏览器上下文选项
     trace: 'on-first-retry',

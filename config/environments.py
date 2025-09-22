@@ -23,6 +23,14 @@ class EnvironmentConfig:
                 'timeout': 30000,
                 'headless': False
             },
+            'test': {
+                'base_url': 'http://62.234.96.153:55409',
+                'api_url': 'http://62.234.96.153:55409/api',
+                'database_url': 'sqlite:///test.db',
+                'debug': True,
+                'timeout': 30000,
+                'headless': False
+            },
             'staging': {
                 'base_url': 'https://staging.example.com',
                 'api_url': 'https://staging-api.example.com/api',
