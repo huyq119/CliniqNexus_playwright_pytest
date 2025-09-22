@@ -2,10 +2,10 @@
 
 # 测试环境用户数据 (http://62.234.96.153:55409)
 test_env:
-  username: "testuser"
-  password: "password123"
-  email: "testuser@test.com"
-  first_name: "测试"
+  username: "lovely_hu@qq.com"
+  password: "test123456"
+  email: "lovely_hu@qq.com"
+  first_name: "胡"
   last_name: "用户"
   role: "user"
 

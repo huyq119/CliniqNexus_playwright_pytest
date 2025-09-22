@@ -109,6 +109,7 @@ def test_data_configuration():
             test_user = users_data['test_env']
             print(f"  测试用户: {test_user['username']}")
             print(f"  用户邮箱: {test_user['email']}")
+            print(f"  用户密码: {'*' * len(test_user['password'])}")
             print("✅ 数据配置测试通过\n")
             return True
         else:

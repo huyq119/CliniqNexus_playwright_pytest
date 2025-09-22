@@ -1,10 +1,17 @@
 {
   "users": {
     "valid_user": {
-      "username": "testuser",
-      "password": "password123",
-      "email": "testuser@example.com",
-      "first_name": "测试",
+      "username": "lovely_hu@qq.com",
+      "password": "test123456",
+      "email": "lovely_hu@qq.com",
+      "first_name": "胡",
+      "last_name": "用户"
+    },
+    "test_env_user": {
+      "username": "lovely_hu@qq.com",
+      "password": "test123456",
+      "email": "lovely_hu@qq.com",
+      "first_name": "胡",
       "last_name": "用户"
     },
     "invalid_user": {
