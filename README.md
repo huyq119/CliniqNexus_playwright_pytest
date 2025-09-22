@@ -4,7 +4,14 @@
 
 ## 🚀 快速开始
 
-### 1. 激活虚拟环境
+### 1. 克隆项目
+
+```bash
+git clone https://github.com/huyq119/CliniqNexus_playwright_pytest.git
+cd CliniqNexus_playwright_pytest
+```
+
+### 2. 激活虚拟环境
 
 ```bash
 # 使用激活脚本
@@ -14,7 +21,7 @@
 source venv/bin/activate
 ```
 
-### 2. 运行测试
+### 3. 运行测试
 
 ```bash
 # 运行所有测试
@@ -183,11 +190,53 @@ pytest -v -s tests/ui/test_login_page.py
 - Jenkins
 - GitLab CI
 
+## 🌳 分支管理
+
+项目采用 Git Flow 分支策略，确保代码质量和项目稳定性。
+
+### 分支结构
+
+- **`main`** - 生产就绪的稳定代码
+- **`develop`** - 集成开发分支
+- **`feature/*`** - 功能开发分支
+- **`hotfix/*`** - 紧急修复分支
+- **`release/*`** - 版本发布分支
+
+### 分支管理工具
+
+使用提供的脚本简化分支操作：
+
+```bash
+# 查看分支状态
+./scripts/branch_manager.sh status
+
+# 创建功能分支
+./scripts/branch_manager.sh create-feature new-feature-name
+
+# 创建热修复分支
+./scripts/branch_manager.sh create-hotfix critical-bug
+
+# 创建发布分支
+./scripts/branch_manager.sh create-release v1.0.0
+
+# 切换分支
+./scripts/branch_manager.sh switch develop
+
+# 同步分支
+./scripts/branch_manager.sh sync
+
+# 清理已合并的分支
+./scripts/branch_manager.sh cleanup
+```
+
+详细的分支策略请参考 [BRANCH_STRATEGY.md](BRANCH_STRATEGY.md)。
+
 ## 📚 更多资源
 
 - [Playwright 官方文档](https://playwright.dev/python/)
 - [pytest 官方文档](https://docs.pytest.org/)
 - [页面对象模式最佳实践](https://playwright.dev/python/docs/pom)
+- [Git Flow 工作流程](https://nvie.com/posts/a-successful-git-branching-model/)
 
 ## 🤝 贡献
 
