@@ -95,19 +95,33 @@ TEST_ENV=test playwright test
 BASE_URL=http://62.234.96.153:55409 playwright test
 ```
 
+### 4. 验证登录功能
+```bash
+# 运行登录功能测试脚本
+PYTHONPATH=. python scripts/test_login.py
+
+# 运行环境验证脚本
+PYTHONPATH=. python scripts/test_environment.py
+```
+
 ## 📊 测试数据配置
 
 测试环境的用户数据已配置在 `data/users.yaml` 中：
 
 ```yaml
 test_env:
-  username: "testuser"
-  password: "password123"
-  email: "testuser@test.com"
-  first_name: "测试"
+  username: "lovely_hu@qq.com"
+  password: "test123456"
+  email: "lovely_hu@qq.com"
+  first_name: "胡"
   last_name: "用户"
   role: "user"
 ```
+
+### 用户凭据信息
+- **用户名/邮箱**: `lovely_hu@qq.com`
+- **密码**: `test123456`
+- **测试网站**: http://62.234.96.153:55409/login
 
 ## 🔍 调试模式
 
