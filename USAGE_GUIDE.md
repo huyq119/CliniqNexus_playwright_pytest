@@ -104,17 +104,26 @@ TEST_ENV=test pytest tests/ui/test_login_page.py --json-report --json-report-fil
 
 ### 常见问题
 
-1. **页面元素找不到**
+1. **SSL证书验证失败**
+   ```bash
+   # 运行SSL配置脚本
+   python scripts/setup_pip_ssl.py
+   
+   # 或者手动设置
+   pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org <package_name>
+   ```
+
+2. **页面元素找不到**
    - 检查页面是否完全加载
    - 验证元素选择器是否正确
    - 使用详细登录测试脚本诊断
 
-2. **登录超时**
+3. **登录超时**
    - 检查网络连接
    - 验证网站是否可访问
    - 增加超时时间设置
 
-3. **测试失败**
+4. **测试失败**
    - 查看生成的截图文件
    - 检查测试报告
    - 运行环境验证脚本
