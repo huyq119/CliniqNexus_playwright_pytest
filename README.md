@@ -23,7 +23,26 @@ source venv/bin/activate
 
 ### 3. 运行测试
 
+#### 🎯 推荐方式：使用测试脚本
+
 ```bash
+# 使用便捷脚本（自动设置正确的环境）
+./run_tests.sh                    # 运行所有登录测试
+./run_tests.sh elements           # 运行页面元素测试
+./run_tests.sh success            # 运行登录成功测试
+./run_tests.sh failure            # 运行登录失败测试
+./run_tests.sh all                # 运行所有登录测试
+./run_tests.sh ui                 # 运行所有UI测试
+./run_tests.sh api                # 运行所有API测试
+./run_tests.sh e2e                # 运行所有端到端测试
+```
+
+#### 🔧 手动运行方式
+
+```bash
+# ⚠️ 重要：必须设置TEST_ENV环境变量
+export TEST_ENV=test
+
 # 运行所有测试
 pytest
 
@@ -38,6 +57,12 @@ pytest tests/ui/test_login_page.py
 # 使用Playwright运行测试
 playwright test
 ```
+
+#### 🌍 环境配置
+
+- **默认环境**: `dev` (http://localhost:3000) - 需要本地服务器
+- **测试环境**: `test` (http://62.234.96.153:55409) - 远程测试服务器
+- **设置方式**: `export TEST_ENV=test` 或使用 `./run_tests.sh`
 
 ### 3. 查看测试报告
 
