@@ -12,8 +12,14 @@ class TestLoginPage:
     
     def test_login_page_elements(self, page: Page):
         """测试登录页面元素显示"""
+        # 验证页面状态
+        assert not page.is_closed(), "页面已关闭"
+        
         login_page = LoginPage(page)
         login_page.navigate()
+        
+        # 等待页面加载完成
+        page.wait_for_load_state('domcontentloaded', timeout=10000)
         
         assert login_page.is_username_field_visible()
         assert login_page.is_password_field_visible()
@@ -31,9 +37,13 @@ class TestLoginPage:
         login_page.login(test_user['username'], test_user['password'])
         
         # 等待页面响应 - 使用智能等待替代硬编码等待
-        page.wait_for_load_state('networkidle')
+        try:
+            page.wait_for_load_state('networkidle', timeout=10000)
+        except Exception:
+            pass  # 如果网络空闲等待失败，继续验证
+        
         # 等待页面稳定，不强制等待错误消息
-        page.wait_for_timeout(1000)  # 给页面一点时间稳定
+        page.wait_for_timeout(2000)  # 给页面更多时间稳定
         
         # 验证登录成功 - 改进的验证逻辑
         # 首先检查URL变化（更可靠的登录成功指示器）
@@ -41,7 +51,11 @@ class TestLoginPage:
         url_changed = current_url != login_page.url
         
         # 检查页面内容中的成功指示器
-        page_content = page.content().lower()
+        try:
+            page_content = page.content().lower()
+        except Exception:
+            # 如果无法获取页面内容，使用URL变化作为主要判断依据
+            page_content = ""
         login_success_indicators = [
             "welcome", "dashboard", "success", "logged in", 
             "profile", "logout", "用户", "欢迎", "登录成功",
@@ -72,21 +86,32 @@ class TestLoginPage:
         login_page.login(invalid_user['username'], invalid_user['password'])
         
         # 等待页面响应 - 使用智能等待替代硬编码等待
-        page.wait_for_load_state('networkidle')
+        try:
+            page.wait_for_load_state('networkidle', timeout=10000)
+        except Exception:
+            pass  # 如果网络空闲等待失败，继续验证
+        
         # 等待错误消息出现
         try:
             page.wait_for_selector('[class*="error"], [class*="danger"], .error, .alert-danger', timeout=5000)
         except TimeoutError:
             pass  # 如果没有错误消息，继续验证
         
+        # 等待页面稳定
+        page.wait_for_timeout(2000)
+        
         # 验证错误消息显示或登录失败的其他指示器
         has_error = login_page.is_error_message_visible()
         
         # 如果没有明显的错误消息，检查页面内容是否显示登录失败
         if not has_error:
-            page_content = page.content().lower()
-            error_indicators = ["invalid", "incorrect", "wrong", "error", "失败", "错误"]
-            has_error = any(indicator in page_content for indicator in error_indicators)
+            try:
+                page_content = page.content().lower()
+                error_indicators = ["invalid", "incorrect", "wrong", "error", "失败", "错误"]
+                has_error = any(indicator in page_content for indicator in error_indicators)
+            except Exception:
+                # 如果无法获取页面内容，假设没有错误
+                has_error = False
         
         assert has_error, "登录失败测试：应该显示错误消息或登录失败指示器"
     
@@ -106,9 +131,13 @@ class TestLoginPage:
         login_page.login(user['username'], user['password'])
         
         # 等待页面响应 - 使用智能等待替代硬编码等待
-        page.wait_for_load_state('networkidle')
+        try:
+            page.wait_for_load_state('networkidle', timeout=10000)
+        except Exception:
+            pass  # 如果网络空闲等待失败，继续验证
+        
         # 等待页面稳定，不强制等待错误消息
-        page.wait_for_timeout(1000)  # 给页面一点时间稳定
+        page.wait_for_timeout(2000)  # 给页面更多时间稳定
         
         # 验证登录结果 - 改进的验证逻辑
         # 首先检查URL变化（更可靠的登录成功指示器）
@@ -116,7 +145,11 @@ class TestLoginPage:
         url_changed = current_url != login_page.url
         
         # 检查页面内容中的成功指示器
-        page_content = page.content().lower()
+        try:
+            page_content = page.content().lower()
+        except Exception:
+            # 如果无法获取页面内容，使用URL变化作为主要判断依据
+            page_content = ""
         login_success_indicators = [
             "welcome", "dashboard", "success", "logged in", 
             "profile", "logout", "用户", "欢迎", "登录成功",
