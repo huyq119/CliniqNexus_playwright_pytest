@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   test:
@@ -14,26 +14,139 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Set up Python
-      uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
+        python-version: '3.13'
+        cache: 'pip'
     
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    
-    - name: Install Playwright Browsers
-      run: playwright install --with-deps
+        playwright install --with-deps
     
     - name: Run Playwright tests
-      run: playwright test
+      run: |
+        pytest tests/ --html=reports/report.html --self-contained-html --browser chromium
+      env:
+        CI: true
     
-    - name: Upload Playwright Report
-      uses: actions/upload-artifact@v3
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: playwright-report
-        path: playwright-report/
+        name: playwright-test-results
+        path: |
+          reports/
+          screenshots/
+        retention-days: 30
+    
+    - name: Upload Playwright HTML report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-html-report
+        path: reports/report.html
+        retention-days: 30
+
+  test-chromium:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        playwright install chromium --with-deps
+    
+    - name: Run Playwright tests on Chromium
+      run: |
+        pytest tests/ui/ --html=reports/chromium-report.html --self-contained-html --browser chromium
+      env:
+        CI: true
+    
+    - name: Upload Chromium test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: chromium-test-results
+        path: |
+          reports/chromium-report.html
+          screenshots/
+        retention-days: 30
+
+  test-firefox:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        playwright install firefox --with-deps
+    
+    - name: Run Playwright tests on Firefox
+      run: |
+        pytest tests/ui/ --html=reports/firefox-report.html --self-contained-html --browser firefox
+      env:
+        CI: true
+    
+    - name: Upload Firefox test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: firefox-test-results
+        path: |
+          reports/firefox-report.html
+          screenshots/
+        retention-days: 30
+
+  test-webkit:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        playwright install webkit --with-deps
+    
+    - name: Run Playwright tests on WebKit
+      run: |
+        pytest tests/ui/ --html=reports/webkit-report.html --self-contained-html --browser webkit
+      env:
+        CI: true
+    
+    - name: Upload WebKit test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: webkit-test-results
+        path: |
+          reports/webkit-report.html
+          screenshots/
         retention-days: 30
