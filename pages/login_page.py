@@ -25,120 +25,158 @@ class LoginPage(BasePage):
     
     def is_username_field_visible(self) -> bool:
         """检查用户名输入框是否可见"""
-        username_selectors = [
-            'input[placeholder*="email"]',
-            'input[name="username"]',
-            'input[name="email"]',
-            'input[type="email"]',
-            '#username',
-            '#email'
-        ]
-        
-        for selector in username_selectors:
-            if self.is_element_visible(selector):
-                return True
-        return False
+        try:
+            # 使用get_by_role方法检查Email输入框
+            email_field = self.page.get_by_role("textbox", name="*Email")
+            return email_field.is_visible()
+        except (TimeoutError, Exception):
+            # 备用方案：使用传统选择器
+            username_selectors = [
+                'input[placeholder*="email"]',
+                'input[name="username"]',
+                'input[name="email"]',
+                'input[type="email"]',
+                '#username',
+                '#email'
+            ]
+            
+            for selector in username_selectors:
+                if self.is_element_visible(selector):
+                    return True
+            return False
     
     def is_password_field_visible(self) -> bool:
         """检查密码输入框是否可见"""
-        password_selectors = [
-            'input[type="password"]',
-            'input[name="password"]',
-            '#password'
-        ]
-        
-        for selector in password_selectors:
-            if self.is_element_visible(selector):
-                return True
-        return False
+        try:
+            # 使用get_by_role方法检查Password输入框
+            password_field = self.page.get_by_role("textbox", name="*Password")
+            return password_field.is_visible()
+        except (TimeoutError, Exception):
+            # 备用方案：使用传统选择器
+            password_selectors = [
+                'input[type="password"]',
+                'input[name="password"]',
+                '#password'
+            ]
+            
+            for selector in password_selectors:
+                if self.is_element_visible(selector):
+                    return True
+            return False
     
     def is_login_button_visible(self) -> bool:
         """检查登录按钮是否可见"""
-        login_button_selectors = [
-            'button:has-text("Login")',
-            'button[type="submit"]',
-            'input[type="submit"]',
-            'button:has-text("登录")',
-            'button:has-text("Sign in")'
-        ]
-        
-        for selector in login_button_selectors:
-            if self.is_element_visible(selector):
-                return True
-        return False
+        try:
+            # 使用get_by_role方法检查Login按钮
+            login_button = self.page.get_by_role("button", name="Login")
+            return login_button.is_visible()
+        except (TimeoutError, Exception):
+            # 备用方案：使用传统选择器
+            login_button_selectors = [
+                'button:has-text("Login")',
+                'button[type="submit"]',
+                'input[type="submit"]',
+                'button:has-text("登录")',
+                'button:has-text("Sign in")'
+            ]
+            
+            for selector in login_button_selectors:
+                if self.is_element_visible(selector):
+                    return True
+            return False
     
     def is_error_message_visible(self) -> bool:
         """检查错误消息是否可见"""
         return self.is_element_visible(self.ERROR_MESSAGE)
     
     def login(self, username: str, password: str) -> None:
-        """执行登录操作"""
-        # 尝试多种用户名输入框选择器
-        username_selectors = [
-            'input[placeholder*="email"]',
-            'input[name="username"]',
-            'input[name="email"]',
-            'input[type="email"]',
-            '#username',
-            '#email'
-        ]
-        
-        password_selectors = [
-            'input[type="password"]',
-            'input[name="password"]',
-            '#password'
-        ]
-        
-        login_button_selectors = [
-            'button:has-text("Login")',
-            'button[type="submit"]',
-            'input[type="submit"]',
-            'button:has-text("登录")',
-            'button:has-text("Sign in")'
-        ]
-        
-        # 查找并填写用户名
-        username_filled = False
-        for selector in username_selectors:
-            try:
-                if self.is_element_visible(selector):
-                    self.fill_input(selector, username)
-                    username_filled = True
-                    break
-            except:
-                continue
-        
-        if not username_filled:
-            raise Exception("无法找到用户名输入框")
-        
-        # 查找并填写密码
-        password_filled = False
-        for selector in password_selectors:
-            try:
-                if self.is_element_visible(selector):
-                    self.fill_input(selector, password)
-                    password_filled = True
-                    break
-            except:
-                continue
-        
-        if not password_filled:
-            raise Exception("无法找到密码输入框")
-        
-        # 查找并点击登录按钮
-        login_clicked = False
-        for selector in login_button_selectors:
-            try:
-                if self.is_element_visible(selector):
-                    self.click_element(selector)
-                    login_clicked = True
-                    break
-            except:
-                continue
-        
-        if not login_clicked:
-            # 如果找不到登录按钮，尝试按回车键
-            self.page.keyboard.press("Enter")
+        """执行登录操作 - 使用get_by_role方法"""
+        try:
+            # 使用get_by_role方法进行登录操作
+            # 点击并填写Email输入框
+            email_field = self.page.get_by_role("textbox", name="*Email")
+            email_field.click()
+            email_field.fill(username)
+            
+            # 点击并填写Password输入框
+            password_field = self.page.get_by_role("textbox", name="*Password")
+            password_field.click()
+            password_field.fill(password)
+            
+            # 点击Login按钮
+            login_button = self.page.get_by_role("button", name="Login")
+            login_button.click()
+            
+        except Exception as e:
+            # 如果get_by_role方法失败，使用备用方案
+            print(f"get_by_role方法失败，使用备用方案: {e}")
+            
+            # 备用方案：使用传统选择器
+            username_selectors = [
+                'input[placeholder*="email"]',
+                'input[name="username"]',
+                'input[name="email"]',
+                'input[type="email"]',
+                '#username',
+                '#email'
+            ]
+            
+            password_selectors = [
+                'input[type="password"]',
+                'input[name="password"]',
+                '#password'
+            ]
+            
+            login_button_selectors = [
+                'button:has-text("Login")',
+                'button[type="submit"]',
+                'input[type="submit"]',
+                'button:has-text("登录")',
+                'button:has-text("Sign in")'
+            ]
+            
+            # 查找并填写用户名
+            username_filled = False
+            for selector in username_selectors:
+                try:
+                    if self.is_element_visible(selector):
+                        self.fill_input(selector, username)
+                        username_filled = True
+                        break
+                except (TimeoutError, Exception):
+                    continue
+            
+            if not username_filled:
+                raise Exception("无法找到用户名输入框")
+            
+            # 查找并填写密码
+            password_filled = False
+            for selector in password_selectors:
+                try:
+                    if self.is_element_visible(selector):
+                        self.fill_input(selector, password)
+                        password_filled = True
+                        break
+                except (TimeoutError, Exception):
+                    continue
+            
+            if not password_filled:
+                raise Exception("无法找到密码输入框")
+            
+            # 查找并点击登录按钮
+            login_clicked = False
+            for selector in login_button_selectors:
+                try:
+                    if self.is_element_visible(selector):
+                        self.click_element(selector)
+                        login_clicked = True
+                        break
+                except (TimeoutError, Exception):
+                    continue
+            
+            if not login_clicked:
+                # 如果找不到登录按钮，尝试按回车键
+                self.page.keyboard.press("Enter")
     
     def get_error_message(self) -> str:
         """获取错误消息文本"""
