@@ -26,8 +26,18 @@ class ScreenshotHelper:
         filename = f"{name}_{timestamp}.png"
         filepath = os.path.join(self.screenshot_dir, filename)
         
-        self.page.screenshot(path=filepath, full_page=full_page)
-        return filepath
+        try:
+            # 检查页面是否关闭
+            if self.page.is_closed():
+                print(f"页面已关闭，无法截图: {name}")
+                return None
+            
+            self.page.screenshot(path=filepath, full_page=full_page)
+            print(f"截图已保存: {filepath}")
+            return filepath
+        except Exception as e:
+            print(f"截图失败 {name}: {e}")
+            return None
     
     def take_element_screenshot(self, selector: str, name: str) -> str:
         """对特定元素截图"""
@@ -41,7 +51,11 @@ class ScreenshotHelper:
     
     def take_screenshot_on_failure(self, test_name: str) -> str:
         """测试失败时截图"""
-        return self.take_screenshot(f"FAILED_{test_name}")
+        try:
+            return self.take_screenshot(f"FAILED_{test_name}")
+        except Exception as e:
+            print(f"失败截图失败: {e}")
+            return None
     
     def take_screenshot_on_success(self, test_name: str) -> str:
         """测试成功时截图"""

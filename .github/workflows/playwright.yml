@@ -27,9 +27,11 @@ jobs:
     
     - name: Run Playwright tests
       run: |
-        pytest tests/ --html=reports/report.html --self-contained-html --browser chromium
+        pytest tests/ --html=reports/report.html --self-contained-html --browser chromium --tb=short -v
       env:
         CI: true
+        TEST_ENV: test
+        HEADLESS: true
     
     - name: Upload test results
       uses: actions/upload-artifact@v4
